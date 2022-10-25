@@ -49,7 +49,18 @@ app.post('/questions', async (req, res) => {
   }
 })
 
-app.get('/questions/:questionId/answers', (req, res) => {})
+app.get('/questions/:questionId/answers', async (req, res) => {
+  const answers = await req.repositories.questionRepo.getAnswers(
+    req.params.questionId
+  )
+  if (!answers) {
+    res
+      .status(404)
+      .send({ msg: `Question with id ${req.params.questionId} not found` })
+  } else {
+    res.json(answers)
+  }
+})
 
 app.post('/questions/:questionId/answers', (req, res) => {})
 
