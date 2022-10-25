@@ -42,11 +42,11 @@ describe('question repository', () => {
   })
   test('should return question with specific id', async () => {
     const question = {
-        id: '50f9e662-fa0e-4ec7-b53b-7845e8f821c3',
-        summary: 'What is my name?',
-        author: 'Jack London',
-        answers: []
-      }
+      id: '50f9e662-fa0e-4ec7-b53b-7845e8f821c3',
+      summary: 'What is my name?',
+      author: 'Jack London',
+      answers: []
+    }
     await questionRepo.addQuestion(question)
 
     expect(
@@ -73,23 +73,46 @@ describe('question repository', () => {
   })
   test('should return a list of answers for question with specific id', async () => {
     const question = {
-        "id": faker.datatype.uuid(),
-        "author": "John Stockton",
-        "summary": "What is the shape of the Earth?",
-        "answers": [
-          {
-            "id": faker.datatype.uuid(),
-            "author": "Brian McKenzie",
-            "summary": "The Earth is flat."
-          },
-          {
-            "id": faker.datatype.uuid(),
-            "author": "Dr Strange",
-            "summary": "It is egg-shaped."
-          }
-        ]
+      id: faker.datatype.uuid(),
+      author: 'John Stockton',
+      summary: 'What is the shape of the Earth?',
+      answers: [
+        {
+          id: faker.datatype.uuid(),
+          author: 'Brian McKenzie',
+          summary: 'The Earth is flat.'
+        },
+        {
+          id: faker.datatype.uuid(),
+          author: 'Dr Strange',
+          summary: 'It is egg-shaped.'
+        }
+      ]
     }
     await questionRepo.addQuestion(question)
     expect(await questionRepo.getAnswers(question.id)).toHaveLength(2)
+  })
+  test('should return answer with specific id', async () => {
+    const question = {
+      id: faker.datatype.uuid(),
+      author: 'John Stockton',
+      summary: 'What is the shape of the Earth?',
+      answers: [
+        {
+          id: faker.datatype.uuid(),
+          author: 'Brian McKenzie',
+          summary: 'The Earth is flat.'
+        },
+        {
+          id: faker.datatype.uuid(),
+          author: 'Dr Strange',
+          summary: 'It is egg-shaped.'
+        }
+      ]
+    }
+    await questionRepo.addQuestion(question)
+    expect(
+      await questionRepo.getAnswer(question.id, question.answers[0].id)
+    ).toEqual(question.answers[0])
   })
 })

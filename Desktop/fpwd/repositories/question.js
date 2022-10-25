@@ -8,9 +8,9 @@ const makeQuestionRepository = fileName => {
     return questions
   }
 
-  const getQuestionById = async (questionId) => {
-    const questions = await getQuestions();
-    const searchedQuestionById = questions.find(q => q.id === questionId)
+  const getQuestionById = async questionId => {
+    const questions = await getQuestions()
+    let searchedQuestionById = questions.find(q => q.id === questionId)
 
     return searchedQuestionById
   }
@@ -22,14 +22,19 @@ const makeQuestionRepository = fileName => {
   }
   const getAnswers = async questionId => {
     const question = await getQuestionById(questionId)
-    if(question) {
+    if (question) {
       return question.answers
     } else {
       return null
     }
-
   }
-  const getAnswer = async (questionId, answerId) => {}
+  const getAnswer = async (questionId, answerId) => {
+    const question = await getQuestionById(questionId)
+    if (!question) return null
+    const answerWithSpecificId = question.answers.find(a => a.id === answerId)
+    if (!answerWithSpecificId) return null
+    return answerWithSpecificId
+  }
   const addAnswer = async (questionId, answer) => {}
 
   return {
