@@ -40,28 +40,24 @@ describe('question repository', () => {
 
     expect(await questionRepo.getQuestions()).toHaveLength(2)
   })
-  // test('should return question with specific id', async () => {
-  //   const testQuestions = [
-  //     {
-  //       id: '50f9e662-fa0e-4ec7-b53b-7845e8f821c3',
-  //       summary: 'What is my name?',
-  //       author: 'Jack London',
-  //       answers: []
-  //     }
-  //   ]
-
-  //   expect(
-  //     await questionRepo.getQuestionById(
-  //       await questionRepo.getQuestions(),
-  //       '50f9e662-fa0e-4ec7-b53b-7845e8f821c3'
-  //     )
-  //   ).toEqual({
-  //     id: '50f9e662-fa0e-4ec7-b53b-7845e8f821c3',
-  //     summary: 'What is my name?',
-  //     author: 'Jack London',
-  //     answers: []
-  //   })
-  // })
+  test('should return question with specific id', async () => {
+    const question = {
+        id: '50f9e662-fa0e-4ec7-b53b-7845e8f821c3',
+        summary: 'What is my name?',
+        author: 'Jack London',
+        answers: []
+      }
+    await questionRepo.addQuestion(question)
+    
+    expect(
+      await questionRepo.getQuestionById('50f9e662-fa0e-4ec7-b53b-7845e8f821c3')
+    ).toEqual({
+      id: '50f9e662-fa0e-4ec7-b53b-7845e8f821c3',
+      summary: 'What is my name?',
+      author: 'Jack London',
+      answers: []
+    })
+  })
   test('Should add new question to existing questions', async () => {
     const question = {
       id: faker.datatype.uuid(),
