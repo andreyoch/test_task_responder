@@ -23,9 +23,7 @@ app.get('/questions', async (req, res) => {
 })
 
 app.get('/questions/:questionId', async (req, res) => {
-  const questions = await req.repositories.questionRepo.getQuestions()
   const questionById = await req.repositories.questionRepo.getQuestionById(
-    questions,
     req.params.questionId
   )
   if (questionById) res.json(questionById)
