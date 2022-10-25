@@ -115,4 +115,29 @@ describe('question repository', () => {
       await questionRepo.getAnswer(question.id, question.answers[0].id)
     ).toEqual(question.answers[0])
   })
+  test('should return question with added answer', async () => {
+    const question = {
+      id: faker.datatype.uuid(),
+      author: 'John Stockton',
+      summary: 'What is the shape of the Earth?',
+      answers: [
+        {
+          id: faker.datatype.uuid(),
+          author: 'Andrew TY',
+          summary: 'Dude, Earth is flat ;)'
+        }
+      ]
+    }
+    await questionRepo.addQuestion(question)
+
+    const answer = {
+      id: faker.datatype.uuid(),
+      author: 'Andre',
+      summary: 'Really?'
+    }
+    const answersBeforeAdd = await questionRepo.getAnswers(question.id)
+    await questionRepo.addAnswer(question.id, answer)
+    const answersAfterAdd = await questionRepo.getAnswers(question.id)
+    expect(answersAfterAdd.length).toBeGreaterThan(answersBeforeAdd.length)
+  })
 })

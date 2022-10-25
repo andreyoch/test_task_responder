@@ -35,7 +35,20 @@ const makeQuestionRepository = fileName => {
     if (!answerWithSpecificId) return null
     return answerWithSpecificId
   }
-  const addAnswer = async (questionId, answer) => {}
+  const addAnswer = async (questionId, answer) => {
+    const question = await getQuestionById(questionId)
+    if (!question) return null
+    const answers = question.answers
+    answers.push(answer)
+    question.answers = answers
+    let questions = await getQuestions()
+    const questionsWithoutQuestionWhichHaveNewAnswer = questions.filter(
+      q => q.id !== question.id
+    )
+    questionsWithoutQuestionWhichHaveNewAnswer.push(question)
+    questions = questionsWithoutQuestionWhichHaveNewAnswer
+    return writeFile(fileName, JSON.stringify(questions), { encoding: 'utf-8' })
+  }
 
   return {
     getQuestions,

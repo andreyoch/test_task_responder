@@ -62,7 +62,26 @@ app.get('/questions/:questionId/answers', async (req, res) => {
   }
 })
 
-app.post('/questions/:questionId/answers', (req, res) => {})
+app.post('/questions/:questionId/answers', (req, res) => {
+  if (!req.body.answer) {
+    res.status(406).send({ msg: 'Please provide answer' })
+  } else if (!req.body.answer.author) {
+    res.status(406).send({ msg: 'Please provide answer author' })
+  } else if (!req.body.answer.summary) {
+    res.status(406).send({ msg: 'Please provide answer summary' })
+  } else {
+    const answer = {
+      id: generateUUV4Id(),
+      author: req.body.answer.author,
+      summary: req.body.answer.summary
+    }
+    req.repositories.questionRepo
+      .addAnswer(req.params.questionId, answer)
+      .then(() => {
+        res.send(200)
+      })
+  }
+})
 
 app.get('/questions/:questionId/answers/:answerId', async (req, res) => {
   const answer = await req.repositories.questionRepo.getAnswer(
