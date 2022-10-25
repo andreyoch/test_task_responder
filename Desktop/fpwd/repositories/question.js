@@ -1,4 +1,4 @@
-const { readFile } = require('fs/promises')
+const { readFile, writeFile } = require('fs/promises')
 
 const makeQuestionRepository = fileName => {
   const getQuestions = async () => {
@@ -13,7 +13,12 @@ const makeQuestionRepository = fileName => {
 
     return searchedQuestionById
   }
-  const addQuestion = async question => {}
+  const addQuestion = async newQuestion => {
+    const questions = await getQuestions()
+    questions.push(newQuestion)
+
+    return writeFile(fileName, JSON.stringify(questions), { encoding: 'utf-8' })
+  }
   const getAnswers = async questionId => {}
   const getAnswer = async (questionId, answerId) => {}
   const addAnswer = async (questionId, answer) => {}

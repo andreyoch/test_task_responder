@@ -2,6 +2,7 @@ const express = require('express')
 const { urlencoded, json } = require('body-parser')
 const makeRepositories = require('./middleware/repositories')
 const { response } = require('express')
+const generateUUV4Id = require('uuid').v4
 
 const STORAGE_FILE_PATH = 'questions.json'
 const PORT = 3000
@@ -31,7 +32,24 @@ app.get('/questions/:questionId', async (req, res) => {
   else res.sendStatus(404)
 })
 
-app.post('/questions', (req, res) => {})
+app.post('/questions', async (req, res) => {
+  if (!req.body.question) {
+    res.status(406).send({ msg: 'Please provide question' })
+  } else if (!req.body.question.author) {
+    res.status(406).send({ msg: 'Please provide question author' })
+  } else if (!req.body.question.summary) {
+    res.status(406).send({ msg: 'Please provide question summary' })
+  } else {
+    req.repositories.questionRepo
+      .addQuestion({
+        id: generateUUV4Id(),
+        author: req.body.question.author,
+        summary: req.body.question.summary,
+        answers: []
+      })
+      .then(() => res.status(201).send({ msg: 'Question added' }))
+  }
+})
 
 app.get('/questions/:questionId/answers', (req, res) => {})
 
